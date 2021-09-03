@@ -57,7 +57,7 @@ func CreateNewMovie(ctx *fiber.Ctx) error {
 			"result": nil})
 	}
 
-	return ctx.JSON(fiber.Map{
+	return ctx.Status(http.StatusCreated).JSON(fiber.Map{
 		"error":  nil,
 		"result": movie})
 }
