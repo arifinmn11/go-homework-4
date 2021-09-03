@@ -60,6 +60,12 @@ func UpdateMovieData(ctx *fiber.Ctx) error {
 
 	err := ctx.BodyParser(payload)
 
+	_, errFind := service.FindMovieBySlug(slug)
+	if errFind != nil {
+		return ctx.Status(http.StatusNotFound).JSON(fiber.Map{
+			"error": errFind.Error()})
+	}
+
 	if err != nil {
 		return err
 	}
