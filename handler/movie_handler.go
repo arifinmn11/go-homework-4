@@ -12,12 +12,14 @@ func GetAllMovie(ctx *fiber.Ctx) error {
 	movies, err := service.FindAllMovie()
 
 	if err != nil {
-		return err
+		return ctx.Status(http.StatusNotFound).JSON(fiber.Map{
+			"error":  err,
+			"result": nil})
 	}
 
 	return ctx.JSON(fiber.Map{
-		"status": 200,
-		"data":   movies})
+		"error":  nil,
+		"result": movies})
 }
 
 func GetSingleMovie(ctx *fiber.Ctx) error {
@@ -26,11 +28,13 @@ func GetSingleMovie(ctx *fiber.Ctx) error {
 	movie, err := service.FindMovieBySlug(slug)
 	if err != nil {
 		return ctx.Status(http.StatusNotFound).JSON(fiber.Map{
-			"error": err.Error()})
+			"error":  err,
+			"result": nil})
 	}
 
 	return ctx.JSON(fiber.Map{
-		"data": movie})
+		"error":  nil,
+		"result": movie})
 
 }
 
@@ -41,16 +45,21 @@ func CreateNewMovie(ctx *fiber.Ctx) error {
 	err := ctx.BodyParser(payload)
 
 	if err != nil {
-		return err
+		return ctx.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"error":  err,
+			"result": nil})
 	}
 
 	movie, errorInsert := service.CreateMovie(*payload)
 	if errorInsert != nil {
-		return errorInsert
+		return ctx.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"error":  errorInsert,
+			"result": nil})
 	}
 
 	return ctx.JSON(fiber.Map{
-		"inserted_record": movie})
+		"error":  nil,
+		"result": movie})
 }
 
 func UpdateMovieData(ctx *fiber.Ctx) error {
@@ -63,7 +72,8 @@ func UpdateMovieData(ctx *fiber.Ctx) error {
 	_, errFind := service.FindMovieBySlug(slug)
 	if errFind != nil {
 		return ctx.Status(http.StatusNotFound).JSON(fiber.Map{
-			"error": errFind.Error()})
+			"error":  errFind,
+			"result": nil})
 	}
 
 	if err != nil {
@@ -72,20 +82,26 @@ func UpdateMovieData(ctx *fiber.Ctx) error {
 
 	update, errorUpdate := service.UpdateMovie(slug, *payload)
 	if errorUpdate != nil {
-		return errorUpdate
+		return ctx.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"error":  errorUpdate,
+			"result": nil})
 	}
 
 	return ctx.JSON(fiber.Map{
-		"updated_record": update})
+		"error":  nil,
+		"result": update})
 }
 
 func DeleteMovieData(ctx *fiber.Ctx) error {
 	slug := ctx.Params("slug")
 	_, errorDeleteMovie := service.DeleteMovieBySlug(slug)
 	if errorDeleteMovie != nil {
-		return errorDeleteMovie
+		return ctx.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"error":  errorDeleteMovie,
+			"result": nil})
 	}
 	return ctx.JSON(fiber.Map{
-		"message": "Delete movie success"})
+		"error":  nil,
+		"result": "Delete movie success"})
 
 }
