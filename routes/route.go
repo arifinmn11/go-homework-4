@@ -7,9 +7,9 @@ import (
 )
 
 func Route(app *fiber.App) {
-	app.Get("/movies", handler.GetAllMovie)
-	app.Get("/movies/:slug", handler.GetSingleMovie)
-	app.Post("/movies", handler.CreateNewMovie)
-	app.Put("/movies/:slug", handler.UpdateMovieData)
-	app.Delete("/movies/:slug", handler.DeleteMovieData)
+	app.Get("/movie", handler.GetAllMovie)
+	app.Get("/movie/:slug", handler.GetSingleMovie)
+	app.Post("/movie", handler.CreateNewMovie)
+	app.Put("/movie/:slug", handler.UpdateMovieData)
+	app.Delete("/movie/:slug", handler.DeleteMovieData)
 }
